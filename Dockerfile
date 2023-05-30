@@ -9,7 +9,6 @@ EXPOSE 8080
 RUN apt-get update && apt-get install -y git
 
 COPY ./requirements.txt /app/requirements.txt
-COPY ./emails_config.yaml /app/emails_config.yaml
 
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
