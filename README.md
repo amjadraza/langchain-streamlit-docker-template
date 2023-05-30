@@ -2,7 +2,7 @@
 📖 LangChain-Streamlit-Docker App Template
 </h1>
 
-![UI](ui.png?raw=true)
+![UI](ui.PNG?raw=true)
 
 ## 🔧 Features
 
