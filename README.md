@@ -2,6 +2,8 @@
 📖 LangChain-Streamlit-Docker App Template
 </h1>
 
+![UI](ui.png?raw=true)
+
 ## 🔧 Features
 
 - Basic Skeleton App configured with `openai` API
