@@ -1,14 +1,3 @@
-# 
-
-This repo serves as a template for how to deploy a LangChain on Streamlit.
-
-
-## Deploy on Streamlit
-
-This is easily deployable on the Streamlit platform.
-Note that when setting up your StreamLit app you should make sure to add `OPENAI_API_KEY` as a secret environment variable.
-
-
 <h1 align="center">
 📖 LangChain-Streamlit-Docker App Template
 </h1>
