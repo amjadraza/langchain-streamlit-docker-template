@@ -99,7 +99,7 @@ I have adopted `Dockerfile` to deploy the app on GCP APP Engine.
 
 3. Access the App using 
 
-https://pandasai-app.ts.r.appspot.com/
+https://langchain-chat.ts.r.appspot.com/
 
 ## Report Feedbacks
 
