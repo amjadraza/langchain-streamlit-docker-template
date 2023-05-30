@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "langchain-streamlit-docker-template"
+version = "0.1.0"
+description = "A template langchain Streamlit App with Docker"
+authors = ["Amjad Raza"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "langchain_streamlit_docker_template"}]
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+langchain = "0.0.184"
+openai = "0.27.7"
+streamlit = "1.22.0"
+streamlit-chat = "0.0.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
