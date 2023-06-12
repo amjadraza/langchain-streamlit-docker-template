@@ -11,6 +11,7 @@
 - Docker Support
 - Deployment on Streamlit 
 - Deployment on Google Cloud App Engine
+- Deployment on Google Cloud using `Cloud Run`
 
 This repo contains an `main.py` file which has a template for a chatbot implementation.
 
@@ -42,11 +43,17 @@ streamlit run app/main.py
 
 Run App using Docker
 --------------------
-This project includes `Dockerfile` to run the app in Docker container.
+This project includes `Dockerfile` to run the app in Docker container. In order to optimise the Docker Image
+size and building time with cache techniques, I have follow tricks in below Article 
+https://medium.com/@albertazzir/blazing-fast-python-docker-builds-with-poetry-a78a66f5aed0
 
 Build the docker container
 
-``docker  build -t langchain-chat-app .``
+``docker  build . -t langchain-chat-app:latest ``
+
+To generate Image with `DOCKER_BUILDKIT`, follow below command
+
+```DOCKER_BUILDKIT=1 docker build --target=runtime . -t angchain-chat-app:latest```
 
 1. Run the docker container directly 
 
@@ -55,6 +62,7 @@ Build the docker container
 2. Run the docker container using docker-compose (Recommended)
 
 ``docker-compose up``
+
 
 Deploy App on Streamlit Public Cloud
 ------------------------------------
