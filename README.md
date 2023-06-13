@@ -53,7 +53,7 @@ Build the docker container
 
 To generate Image with `DOCKER_BUILDKIT`, follow below command
 
-```DOCKER_BUILDKIT=1 docker build --target=runtime . -t angchain-chat-app:latest```
+```DOCKER_BUILDKIT=1 docker build --target=runtime . -t langchain-chat-app:latest```
 
 1. Run the docker container directly 
 
@@ -99,6 +99,89 @@ I have adopted `Dockerfile` to deploy the app on GCP APP Engine.
 3. Access the App using 
 
 https://langchain-chat.ts.r.appspot.com/
+
+
+Deploy App on Google Cloud using Cloud Run
+------------------------------------------
+This app can be deployed on Google Cloud using Cloud Run following below steps.
+
+## Prerequisites
+
+Follow below guide on basic Instructions.
+[How to deploy Streamlit apps to Google App Engine](https://dev.to/whitphx/how-to-deploy-streamlit-apps-to-google-app-engine-407o)
+
+We added below tow configurations files 
+
+1. `cloudbuild.yaml`: A Configuration file for `gcloud`
+2. `.gcloudignore` : Configure the file to ignore file / folders to be uploaded
+
+we are going to use `Dockerfile` to deploy the app using Google Cloud Run.
+
+1. Initialise & Configure the Google Project using Command Prompt
+
+`gcloud app create --project=[YOUR_PROJECT_ID]`
+
+2. Enable Services for the Project
+
+```
+gcloud services enable cloudbuild.googleapis.com
+gcloud services enable run.googleapis.com
+```
+
+3. Create Service Account
+
+```
+gcloud iam service-accounts create langchain-app-cr \
+    --display-name="langchain-app-cr"
+
+gcloud projects add-iam-policy-binding langchain-chat \
+    --member="serviceAccount:langchain-app-cr@langchain-chat.iam.gserviceaccount.com" \
+    --role="roles/run.invoker"
+
+gcloud projects add-iam-policy-binding langchain-chat \
+    --member="serviceAccount:langchain-app-cr@langchain-chat.iam.gserviceaccount.com" \
+    --role="roles/serviceusage.serviceUsageConsumer"
+``` 
+
+4. Generate the Docker
+
+`DOCKER_BUILDKIT=1 docker build --target=runtime . -t australia-southeast1-docker.pkg.dev/langchain-chat/app/langchain-chat-app:latest`
+
+5. Push Image to Google Artifct's Registry
+
+Configure-docker 
+
+`gcloud auth configure-docker australia-southeast1-docker.pkg.dev`
+
+In order to push the `docker-image` to Artifact registry, first create app in the region of choice. 
+
+Check the artifacts locations
+
+`gcloud artifacts locations list`
+
+Create the repository with name `app`
+
+```
+gcloud artifacts repositories create app \
+    --repository-format=docker \
+    --location=australia-southeast1 \
+    --description="A Langachain Streamlit App" \
+    --async
+```
+
+Once ready, let us push the image to location
+
+`docker push australia-southeast1-docker.pkg.dev/langchain-chat/app/langchain-chat-app:latest`
+
+6. Deploy using Cloud Run
+
+Once image is pushed to Google Cloud Artifacts Registry. Let us deploy the image.
+
+```
+gcloud run deploy langchain-chat-app --image=australia-southeast1-docker.pkg.dev/langchain-chat/app/langchain-chat-app:latest \
+    --region=australia-southeast1 \
+    --service-account=langchain-app-cr@langchain-chat.iam.gserviceaccount.com
+```
 
 ## Report Feedbacks
 

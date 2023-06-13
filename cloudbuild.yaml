@@ -1,0 +1,22 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  id: Build Image
+  entrypoint: bash
+  args:
+    - -c
+    - |
+      DOCKER_BUILDKIT=1 docker build --target=runtime . -t australia-southeast1-docker.pkg.dev/langchain-chat/app/langchain-chat-app:latest \
+      && docker push australia-southeast1-docker.pkg.dev/langchain-chat/app/langchain-chat-app:latest
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  id: Deploy API
+  args: ['run', 'deploy', 'langchain-chat',
+             '--image=australia-southeast1-docker.pkg.dev/langchain-chat/app/langchain-chat-app:latest',
+             '--region=australia-southeast1', '--service-account=langchain-app-cr@langchain-chat.iam.gserviceaccount.com',
+              '--allow-unauthenticated',
+              '--set-env-vars=STREAMLIT_SERVER_PORT=8080']
+  waitFor: [ 'Build Image' ]
+
+images:
+- australia-southeast1-docker.pkg.dev/langchain-chat/app/langchain-chat-app:latest
