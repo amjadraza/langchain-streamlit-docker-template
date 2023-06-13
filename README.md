@@ -8,8 +8,8 @@
 
 - Basic Skeleton App configured with `openai` API
 - A ChatBot using LangChain and Streamlit
-- Docker Support
-- Deployment on Streamlit 
+- Docker Support with Optimisation Cache etc
+- Deployment on Streamlit Public Cloud
 - Deployment on Google Cloud App Engine
 - Deployment on Google Cloud using `Cloud Run`
 
@@ -151,7 +151,7 @@ gcloud projects add-iam-policy-binding langchain-chat \
 
 `DOCKER_BUILDKIT=1 docker build --target=runtime . -t australia-southeast1-docker.pkg.dev/langchain-chat/app/langchain-chat-app:latest`
 
-5. Push Image to Google Artifct's Registry
+5. Push Image to Google Artifact's Registry
 
 Configure-docker 
 
