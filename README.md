@@ -141,6 +141,15 @@ gcloud projects add-iam-policy-binding langchain-chat \
 gcloud projects add-iam-policy-binding langchain-chat \
     --member="serviceAccount:langchain-app-cr@langchain-chat.iam.gserviceaccount.com" \
     --role="roles/serviceusage.serviceUsageConsumer"
+
+gcloud projects add-iam-policy-binding langchain-chat \
+    --member="serviceAccount:langchain-app-cr@langchain-chat.iam.gserviceaccount.com" \
+    --role="roles/run.admin"
+
+gcloud projects add-iam-policy-binding  \
+--member=serviceAccount:service-langchain-chat@serverless-robot-prod.iam.gserviceaccount.com \
+--role=roles/run.serviceAgent langchain-chat
+
 ``` 
 
 4. Generate the Docker
