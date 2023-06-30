@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.abspath('.'))
 
 import streamlit as st
-from streamlit_chat import message
+import time
 from demo_app.components.sidebar import sidebar
 from langchain.chains import ConversationChain
 from langchain.llms import OpenAI
@@ -38,22 +38,38 @@ if __name__ == "__main__":
     else:
         chain = load_chain()
 
-        if "generated" not in st.session_state:
-            st.session_state["generated"] = []
+        if "messages" not in st.session_state:
+            st.session_state["messages"] = [
+                {"role": "assistant", "content": "How can I help you?"}]
 
-        if "past" not in st.session_state:
-            st.session_state["past"] = []
+        # Display chat messages from history on app rerun
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
 
-        user_input = get_text()
+        if user_input := st.chat_input("What is your question?"):
+            # Add user message to chat history
+            st.session_state.messages.append({"role": "user", "content": user_input})
+            # Display user message in chat message container
+            with st.chat_message("user"):
+                st.markdown(user_input)
 
-        if user_input:
-            output = chain.run(input=user_input)
+            with st.chat_message("assistant"):
+                message_placeholder = st.empty()
+                full_response = ""
 
-            st.session_state.past.append(user_input)
-            st.session_state.generated.append(output)
+            with st.chat_message("assistant"):
+                message_placeholder = st.empty()
+                full_response = ""
 
-        if st.session_state["generated"]:
+                with st.spinner('CHAT-BOT is at Work ...'):
+                    assistant_response = output = chain.run(input=user_input)
+                # Simulate stream of response with milliseconds delay
+                for chunk in assistant_response.split():
+                    full_response += chunk + " "
+                    time.sleep(0.05)
+                    # Add a blinking cursor to simulate typing
+                    message_placeholder.markdown(full_response + "▌")
+                message_placeholder.markdown(full_response)
+            st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-            for i in range(len(st.session_state["generated"]) - 1, -1, -1):
-                message(st.session_state["generated"][i], key=str(i))
-                message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")

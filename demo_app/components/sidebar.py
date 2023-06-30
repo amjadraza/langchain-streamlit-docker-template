@@ -6,7 +6,6 @@ from demo_app.components.faq import faq
 def set_open_api_key(api_key: str):
     st.session_state["OPENAI_API_KEY"] = api_key
     st.session_state["open_api_key_configured"] = True
-    print(st.session_state["open_api_key_configured"])
     print('OPENAI API key is Configured Successfully!')
 
 
@@ -25,7 +24,7 @@ def sidebar():
         )
 
         if open_api_key_input:
-            print(f'Entered API is {open_api_key_input}')
+            # print(f'Entered API is {open_api_key_input}')
             set_open_api_key(open_api_key_input)
 
         if not st.session_state.get("open_api_key_configured"):

@@ -103,6 +103,7 @@ https://langchain-chat.ts.r.appspot.com/
 
 Deploy App on Google Cloud using Cloud Run
 ------------------------------------------
+
 This app can be deployed on Google Cloud using Cloud Run following below steps.
 
 ## Prerequisites
@@ -153,7 +154,7 @@ gcloud projects add-iam-policy-binding langchain-chat \
 
 5. Push Image to Google Artifact's Registry
 
-Configure-docker 
+`configure-docker` authentication     
 
 `gcloud auth configure-docker australia-southeast1-docker.pkg.dev`
 
