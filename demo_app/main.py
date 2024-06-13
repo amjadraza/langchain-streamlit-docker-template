@@ -8,12 +8,39 @@ import streamlit as st
 import time
 from demo_app.components.sidebar import sidebar
 from langchain.chains import ConversationChain
-from langchain.llms import OpenAI
+from langchain_openai import ChatOpenAI
 
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+
+# llm = ChatOpenAI(
+#     model="gpt-4o",
+#     openai_api_key=st.session_state.get("OPENAI_API_KEY"),
+#     temperature=0,
+#     max_tokens=None,
+#     timeout=None,
+#     max_retries=2,
+#     # api_key="...",  # if you prefer to pass api key in directly instaed of using env vars
+#     # base_url="...",
+#     # organization="...",
+#     # other params...
+#     )
 
 def load_chain():
     """Logic for loading the chain you want to use should go here."""
-    llm = OpenAI(openai_api_key=st.session_state.get("OPENAI_API_KEY"), temperature=0)
+    # llm = OpenAI(openai_api_key=st.session_state.get("OPENAI_API_KEY"), temperature=0)
+    llm = ChatOpenAI(
+    model="gpt-4o",
+    openai_api_key=st.session_state.get("OPENAI_API_KEY"),
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
+    # api_key="...",  # if you prefer to pass api key in directly instaed of using env vars
+    # base_url="...",
+    # organization="...",
+    # other params...
+    )
     chain = ConversationChain(llm=llm)
     return chain
 
