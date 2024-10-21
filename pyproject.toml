@@ -1,20 +1,19 @@
-[tool.poetry]
+[project]
 name = "langchain-streamlit-docker-template"
 version = "0.1.0"
 description = "A template langchain Streamlit App with Docker"
-authors = ["Amjad Raza"]
-license = "MIT"
+authors = [
+    {name = "Amjad Raza", email = "amjad@example.com"}
+]
+license = {text = "MIT"}
 readme = "README.md"
-packages = [{include = "langchain_streamlit_docker_template"}]
-
-
-[tool.poetry.dependencies]
-python = "^3.10"
-langchain = "^0.2.3"
-langchain-openai = "^0.1.8"
-streamlit = "^1.35.0"
-
+requires-python = ">=3.10"
+dependencies = [
+    "langchain>=0.3.4",
+    "langchain-openai>=0.2.3",
+    "streamlit>=1.39.0",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

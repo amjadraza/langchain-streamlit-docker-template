@@ -1,14 +1,8 @@
 # The builder image, used to build the virtual environment
-FROM python:3.11-buster as builder
+FROM python:3.12-slim-bookworm as builder
+COPY --from=ghcr.io/astral-sh/uv:0.4.24 /uv /uvx /bin/
 
 RUN apt-get update && apt-get install -y git
-
-RUN pip install poetry==1.4.2
-
-ENV POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1 \
-    POETRY_VIRTUALENVS_CREATE=1 \
-    POETRY_CACHE_DIR=/tmp/poetry_cache
 
 ENV HOST=0.0.0.0
 ENV LISTEN_PORT 8080
@@ -16,19 +10,20 @@ EXPOSE 8080
 
 WORKDIR /app
 
-#COPY pyproject.toml ./app/pyproject.toml
-#COPY poetry.lock ./app/poetry.lock
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml ./
 
-RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+# Install dependencies using uv
+RUN uv venv .venv
+RUN /bin/bash -c "source .venv/bin/activate && uv pip compile pyproject.toml > requirements.txt && uv pip install -r requirements.txt"
 
 # The runtime image, used to just run the code provided its virtual environment
-FROM python:3.11-slim-buster as runtime
+FROM python:3.12-slim-bookworm as runtime
 
 ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH"
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+COPY --from=builder /app/requirements.txt ./requirements.txt
 
 COPY ./demo_app ./demo_app
 COPY ./.streamlit ./.streamlit
