@@ -28,17 +28,18 @@ Depending on the type of your chain, you may also need to change the inputs/outp
 git clone https://github.com/amjadraza/langchain-streamlit-docker-template.git
 ```
 
-2. Install dependencies with [Poetry](https://python-poetry.org/) and activate virtual environment🔨
+2. Install dependencies with [uv](https://docs.astral.sh/uv/) and activate virtual environment🔨
 
 ```bash
-poetry install
-poetry shell
+uv venv
+source .venv/bin/activate
+uv pip install -r pyproject.toml
 ```
 
 3. Run the Streamlit server🚀
 
 ```bash
-streamlit run app/main.py 
+streamlit run demo_app/main.py 
 ```
 
 Run App using Docker
