@@ -8,6 +8,7 @@
 
 - Basic Skeleton App configured with `openai` API
 - A ChatBot using LangChain and Streamlit
+- users can upload one or multiple files in chat
 - Docker Support with Optimisation Cache etc
 - Deployment on Streamlit Public Cloud
 - Deployment on Google Cloud App Engine
