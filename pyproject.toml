@@ -9,9 +9,9 @@ license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "langchain>=0.3.4",
-    "langchain-openai>=0.2.3",
-    "streamlit>=1.39.0",
+    "langchain>=0.3.20",
+    "langchain-openai>=0.3.8",
+    "streamlit>=1.43.0",
 ]
 
 [build-system]

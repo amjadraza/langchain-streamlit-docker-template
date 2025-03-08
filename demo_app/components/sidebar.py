@@ -31,6 +31,36 @@ def sidebar():
             st.error("Please configure your Open API key!")
         else:
             st.markdown("Open API Key Configured!")
+        
+        # Add dropdown for file selection
+        file_selection = st.selectbox(
+            "Choose file upload option:",
+            options=["No files", "Single", "Multiple"],
+            index=0,  # Default to "No files"
+            help="Select whether you want to upload no files, a single file, or multiple files"
+        )
+        
+        selection_map = {"No files": False, "Single":True, "Multiple":'multiple'}
+
+        # Store the selection in session state
+        st.session_state["file_selection"] = selection_map[file_selection]
+
+        # Handle file upload based on selection
+        if file_selection == "Single file":
+            uploaded_file = st.file_uploader("Upload a file", type=None)
+            if uploaded_file is not None:
+                st.session_state["uploaded_files"] = [uploaded_file]
+                st.success(f"File uploaded: {uploaded_file.name}")
+        elif file_selection == "Multiple files":
+            uploaded_files = st.file_uploader("Upload files", type=None, accept_multiple_files=True)
+            if uploaded_files:
+                st.session_state["uploaded_files"] = uploaded_files
+                st.success(f"{len(uploaded_files)} files uploaded")
+        else:
+            # No files option selected
+            st.session_state["uploaded_files"] = []
+
+        st.markdown("---")
 
         st.markdown("---")
         st.markdown("# About")

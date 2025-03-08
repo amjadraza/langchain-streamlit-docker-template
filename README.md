@@ -36,6 +36,17 @@ source .venv/bin/activate
 uv pip install -r pyproject.toml
 ```
 
+if you are using remote machines like WSL2, to optimise lcoal developments, follow
+
+```
+uv venv ~/.cache/pyuv/langchain-streamlit-docker-template
+source /home/maraza/.cache/pyuv/langchain-streamlit-docker-template/bin/activate
+uv pip install  -r pyproject.toml
+```
+
+> You can name the environment.
+
+
 3. Run the Streamlit server🚀
 
 ```bash

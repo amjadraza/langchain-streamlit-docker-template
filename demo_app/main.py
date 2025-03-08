@@ -74,7 +74,7 @@ if __name__ == "__main__":
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
 
-        if user_input := st.chat_input("What is your question?"):
+        if user_input := st.chat_input("What is your question?", accept_file=st.session_state["file_selection"]):
             # Add user message to chat history
             st.session_state.messages.append({"role": "user", "content": user_input})
             # Display user message in chat message container
