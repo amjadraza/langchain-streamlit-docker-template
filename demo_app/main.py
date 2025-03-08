@@ -147,11 +147,11 @@ if __name__ == "__main__":
                     
                     with st.spinner('CHAT-BOT is at Work ...'):
                         # If we have PDF content, use it as context
-                        if st.session_state["pdf_content"]:
-                            assistant_response = get_response_with_pdf_context(chain, query, st.session_state["pdf_content"])
-                        else:
-                            # Otherwise, use the normal chain
-                            assistant_response = chain.invoke(input=query)
+                        # if st.session_state["pdf_content"]:
+                        assistant_response = get_response_with_pdf_context(chain, query, st.session_state["pdf_content"])
+                        # else:
+                        #     # Otherwise, use the normal chain
+                        #     assistant_response = chain.invoke(input=query)
                     
                     # Simulate stream of response with milliseconds delay
                     for chunk in assistant_response.split():

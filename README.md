@@ -41,7 +41,7 @@ if you are using remote machines like WSL2, to optimise lcoal developments, foll
 
 ```
 uv venv ~/.cache/pyuv/langchain-streamlit-docker-template
-source /home/maraza/.cache/pyuv/langchain-streamlit-docker-template/bin/activate
+source /home/{username}/.cache/pyuv/langchain-streamlit-docker-template/bin/activate
 uv pip install  -r pyproject.toml
 ```
 
