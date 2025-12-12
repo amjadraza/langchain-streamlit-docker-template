@@ -1,74 +1,142 @@
+"""
+Sidebar Component for Streamlit Chat Application
+Handles API key configuration and feature toggles
+"""
 import streamlit as st
-
-from demo_app.components.faq import faq
-
-
-def set_open_api_key(api_key: str):
-    st.session_state["OPENAI_API_KEY"] = api_key
-    st.session_state["open_api_key_configured"] = True
-    print('OPENAI API key is Configured Successfully!')
 
 
 def sidebar():
-    with st.sidebar:
-        st.markdown(
-            "## How to use\n"
-            "1. Enter your [OpenAI API key](https://platform.openai.com/account/api-keys) below🔑\n"  # noqa: E501
+    """
+    Render sidebar with configuration options
+    """
+    st.sidebar.title("⚙️ Configuration")
+    
+    # API Key Configuration
+    st.sidebar.markdown("### 🔑 API Key")
+    api_key = st.sidebar.text_input(
+        "OpenAI API Key",
+        type="password",
+        key="OPENAI_API_KEY_INPUT",
+        help="Enter your OpenAI API key. Get one at https://platform.openai.com/api-keys"
+    )
+    
+    if api_key:
+        st.session_state["OPENAI_API_KEY"] = api_key
+        st.session_state["open_api_key_configured"] = True
+        st.sidebar.success("✅ API Key configured!")
+    else:
+        st.session_state["open_api_key_configured"] = False
+        st.sidebar.warning("⚠️ Please enter your API key")
+    
+    st.sidebar.markdown("---")
+    
+    # Feature Toggles
+    st.sidebar.markdown("### 🎛️ Features")
+    
+    # File upload toggle
+    st.session_state["file_selection"] = st.sidebar.checkbox(
+        "📄 Enable PDF Uploads",
+        value=True,
+        help="Allow uploading PDF documents for analysis"
+    )
+    
+    # Voice input toggle
+    st.session_state["voice_selection"] = st.sidebar.checkbox(
+        "🎤 Enable Voice Input",
+        value=True,
+        help="Enable voice-to-text using OpenAI Whisper"
+    )
+    
+    # TTS voice selection
+    if st.session_state.get("voice_selection", True):
+        st.session_state["tts_voice"] = st.sidebar.selectbox(
+            "🔊 TTS Voice",
+            options=["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
+            index=4,  # Default to "nova"
+            help="Select voice for text-to-speech responses"
         )
-        open_api_key_input = st.text_input(
-            "Openai API Key",
-            type="password",
-            placeholder="Paste your API key here (sk-...)",
-            help="You can get your API key from https://platform.openai.com/account/api-keys.",  # noqa: E501
-            value=st.session_state.get("OPEN_API_KEY", ""),
-        )
-
-        if open_api_key_input:
-            # print(f'Entered API is {open_api_key_input}')
-            set_open_api_key(open_api_key_input)
-
-        if not st.session_state.get("open_api_key_configured"):
-            st.error("Please configure your Open API key!")
-        else:
-            st.markdown("Open API Key Configured!")
+    
+    st.sidebar.markdown("---")
+    
+    # Session Management
+    st.sidebar.markdown("### 💾 Session")
+    
+    # Session ID display
+    session_id = st.session_state.get("session_id", "default_session")
+    st.sidebar.text_input(
+        "Session ID",
+        value=session_id,
+        disabled=True,
+        help="Current conversation session identifier"
+    )
+    
+    # Clear conversation button
+    if st.sidebar.button("🗑️ Clear Conversation", use_container_width=True):
+        st.session_state.messages = [
+            {
+                "role": "assistant",
+                "content": "👋 Conversation cleared! How can I help you?"
+            }
+        ]
+        st.session_state.pdf_content = ""
+        st.rerun()
+    
+    st.sidebar.markdown("---")
+    
+    # Model Information
+    st.sidebar.markdown("### 🤖 Model Info")
+    st.sidebar.info(
+        """
+        **Language Model:** GPT-4o
+        **Speech-to-Text:** Whisper-1
+        **Text-to-Speech:** TTS-1
+        **Max PDF Size:** 25 MB
+        """
+    )
+    
+    st.sidebar.markdown("---")
+    
+    # Tips
+    with st.sidebar.expander("💡 Tips & Tricks"):
+        st.markdown("""
+        **Voice Input:**
+        - Speak clearly and minimize background noise
+        - Works in 99+ languages
+        - Click the mic icon to record
+        - Get audio responses automatically!
         
-        # Add dropdown for file selection
-        file_selection = st.selectbox(
-            "Choose file upload option:",
-            options=["No files", "Single", "Multiple"],
-            index=0,  # Default to "No files"
-            help="Select whether you want to upload no files, a single file, or multiple files"
-        )
+        **PDF Analysis:**
+        - Upload one or multiple PDFs
+        - Ask specific questions about the content
+        - Context is maintained throughout the conversation
         
-        selection_map = {"No files": False, "Single":True, "Multiple":'multiple'}
+        **Audio Responses:**
+        - When you use voice input, responses include audio
+        - Choose your preferred voice in settings
+        - Both text and audio are provided
+        
+        **Best Practices:**
+        - Be specific in your questions
+        - Reference previous messages in follow-ups
+        - Use voice for quick queries
+        """)
+    
+    # Footer
+    st.sidebar.markdown("---")
+    st.sidebar.markdown(
+        """
+        <div style='text-align: center; color: gray; font-size: 0.8em;'>
+        Built with Streamlit & LangChain<br>
+        Powered by OpenAI
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-        # Store the selection in session state
-        st.session_state["file_selection"] = selection_map[file_selection]
 
-        # Handle file upload based on selection
-        if file_selection == "Single file":
-            uploaded_file = st.file_uploader("Upload a file", type=None)
-            if uploaded_file is not None:
-                st.session_state["uploaded_files"] = [uploaded_file]
-                st.success(f"File uploaded: {uploaded_file.name}")
-        elif file_selection == "Multiple files":
-            uploaded_files = st.file_uploader("Upload files", type=None, accept_multiple_files=True)
-            if uploaded_files:
-                st.session_state["uploaded_files"] = uploaded_files
-                st.success(f"{len(uploaded_files)} files uploaded")
-        else:
-            # No files option selected
-            st.session_state["uploaded_files"] = []
-
-        st.markdown("---")
-
-        st.markdown("---")
-        st.markdown("# About")
-        st.markdown(
-            "📖 This App is template of lanchain-streamlit-docker example"
-        )
-        st.markdown("Made by [DR. AMJAD RAZA](https://www.linkedin.com/in/amjadraza/)")
-        st.markdown("Credits for Template [hwchase17](https://github.com/hwchase17/langchain-streamlit-template)")
-        st.markdown("---")
-
-        faq()
+if __name__ == "__main__":
+    # For testing the sidebar independently
+    st.set_page_config(page_title="Sidebar Test", page_icon="⚙️")
+    sidebar()
+    st.title("Sidebar Component Test")
+    st.write("Check the sidebar configuration →")

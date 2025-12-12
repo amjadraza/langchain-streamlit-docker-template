@@ -8,7 +8,9 @@
 
 - Basic Skeleton App configured with `openai` API
 - A ChatBot using LangChain and Streamlit
+- Upgraded to Langchain 1.x Ecosystem
 - users can upload one or multiple files in chat
+- User can ask Question using Text or Voice
 - Docker Support with Optimisation Cache etc
 - Deployment on Streamlit Public Cloud
 - Deployment on Google Cloud App Engine
@@ -39,16 +41,15 @@ uv pip install -r pyproject.toml
 
 if you are using remote machines like WSL2, to optimise lcoal developments, follow
 
-```
+```bash
 uv venv ~/.cache/pyuv/langchain-streamlit-docker-template
 source /home/{username}/.cache/pyuv/langchain-streamlit-docker-template/bin/activate
 uv pip install  -r pyproject.toml
 ```
-
 > You can name the environment.
 
 
-3. Run the Streamlit server🚀
+1. Run the Streamlit server🚀
 
 ```bash
 streamlit run demo_app/main.py 
